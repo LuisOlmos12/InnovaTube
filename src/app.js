@@ -19,11 +19,13 @@ app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const port = process.env.PORT || 4000;
+
 app.use(myconnection(mysql, {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  port: parseInt(process.env.DB_PORT), // convertir a número
   database: process.env.DB_NAME
 }, 'single'));
 
