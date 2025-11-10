@@ -27,6 +27,7 @@ app.use(myconnection(mysql, {
   database: process.env.DB_NAME
 }, 'single'));
 
+
 app.use(session({
   secret: 'secret',
   resave: true,
@@ -77,7 +78,6 @@ app.post('/removeFavorito', (req, res) => {
   req.session.favoritos = (req.session.favoritos || []).filter(v => v.videoId !== videoId);
   res.json({ success: true, favoritos: req.session.favoritos });
 });
-
 
 
 
