@@ -25,7 +25,7 @@ app.use(myconnection(mysql, {
   password: process.env.DB_PASS,
   port: process.env.DB_PORT || 3306,
   database: process.env.DB_NAME
-}, 'single')); // 'single' es recomendado para producción
+}, 'single')); 
 
 
 app.use(session({
