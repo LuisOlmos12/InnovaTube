@@ -19,7 +19,7 @@ app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3306;
 
 app.use(myconnection(mysql, {
   host: process.env.DB_HOST,
@@ -84,7 +84,7 @@ app.post('/removeFavorito', (req, res) => {
 
 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3306;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
