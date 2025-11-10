@@ -19,13 +19,13 @@ app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 3306;
+const port = process.env.PORT || 4000;
 
 app.use(myconnection(mysql, {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT), // convertir a número
+  port: parseInt(process.env.DB_PORT),
   database: process.env.DB_NAME
 }, 'single'));
 
@@ -84,7 +84,7 @@ app.post('/removeFavorito', (req, res) => {
 
 
 
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
