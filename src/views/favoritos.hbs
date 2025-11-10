@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Favoritos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .card { box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+  </style>
+</head>
+<body>
+
+    <!--Buscador -->
+    <div class="text-center mb-4">
+      <input id="searchFav" type="text" class="form-control w-50 mx-auto" placeholder="Buscar en tus favoritos">
+    </div>
+
+    {{#if favoritos.length}}
+      <div id="favContainer" class="row g-4">
+        {{#each favoritos}}
+        <div class="col-md-3 fav-card">
+          <div class="card">
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/{{videoId}}" frameborder="0" allowfullscreen></iframe>
+            <div class="card-body text-center">
+              <h6 class="fav-title">{{title}}</h6>
+              <button class="btn btn-danger btn-sm remove-btn" data-id="{{videoId}}">desmarcar</button>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="text-center text-muted">Aún no tienes favoritos.</p>
+    {{/if}}
+  </div>
+
+  <script>
+    //Filtrar favoritos
+    document.getElementById('searchFav').addEventListener('input', e => {
+      const term = e.target.value.toLowerCase();
+      document.querySelectorAll('.fav-card').forEach(card => {
+        const title = card.querySelector('.fav-title').textContent.toLowerCase();
+        card.style.display = title.includes(term) ? 'block' : 'none';
+      });
+    });
+
+    // Eliminar favorito
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const videoId = btn.dataset.id;
+        await fetch('/removeFavorito', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ videoId })
+        });
+        location.reload();
+      });
+    });
+  </script>
+
+</body>
+</html>

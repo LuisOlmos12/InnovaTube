@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <div class="text-center mb-4">
+    <h3>Busca videos en YouTube</h3>
+    <input id="searchQuery" type="text" class="form-control w-50 mx-auto" placeholder="Buscar">
+    <button id="searchBtn" class="btn btn-danger mt-3">Buscar</button>
+  </div>
+
+  <div id="videosContainer" class="row justify-content-center g-4"></div>
+</div>
+
+<script>
+  const API_KEY = 'AIzaSyBVSoOQI_er9G5T-xv_7lz9HYPIRhFJujo';
+
+  document.getElementById('searchBtn').addEventListener('click', async () => {
+    const query = document.getElementById('searchQuery').value.trim();
+    if (!query) return alert('Por favor, escribe algo para buscar.');
+
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(query)}&key=${API_KEY}`);
+    const data = await res.json();
+
+    const container = document.getElementById('videosContainer');
+    container.innerHTML = '';
+
+    data.items.forEach(video => {
+      if (!video.id.videoId) return;
+
+      const card = document.createElement('div');
+      card.classList.add('col-md-3');
+      card.innerHTML = `
+        <div class="card video-card">
+          <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>
+          <div class="card-body">
+            <h6 class="card-title">${video.snippet.title}</h6>
+            <button class="btn btn-outline-danger btn-sm">marcar</button>
+          </div>
+        </div>
+      `;
+
+      const btn = card.querySelector('button');
+      btn.addEventListener('click', async () => {
+        const body = {
+          videoId: video.id.videoId,
+          title: video.snippet.title,
+          thumbnail: video.snippet.thumbnails.default.url
+        };
+        await fetch('/addFavorito', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        btn.textContent = 'Agregado';
+        btn.disabled = true;
+      });
+
+      container.appendChild(card);
+    });
+  });
+</script>
