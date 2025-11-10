@@ -20,15 +20,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(myconnection(mysql, {
-  host: process.env.MYSQLHOST,      // HOST de Railway
-  user: process.env.MYSQLUSER,      // USERNAME de Railway
-  password: process.env.MYSQLPASSWORD,  // PASSWORD de Railway
-  port: process.env.MYSQLPORT,      // PORT de Railway (3306 normalmente)
-  database: process.env.MYSQL_DATABASE   // DATABASE de Railway
-}));
-
-const PORT = process.env.PORT || 4000;
-app.set('port', PORT);
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT || 3306,
+  database: process.env.DB_NAME
+}, 'single')); // 'single' es recomendado para producción
 
 
 app.use(session({
