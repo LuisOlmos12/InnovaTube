@@ -8,7 +8,7 @@ const app = express();
 const loginRoutes = require('./routes/login');
 
 
-app.set('port', 4000);
+// app.set('port', 4000);
 
 app.set('views', __dirname + '/views');
 app.engine('.hbs', engine({
@@ -20,12 +20,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(myconnection(mysql, {
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  port: 3306,
-  database: 'nodelogin'
-}));
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME
+}, 'single'));
 
 app.use(session({
   secret: 'secret',
@@ -83,7 +83,6 @@ app.post('/removeFavorito', (req, res) => {
 
 
 // Servidor
-app.listen(app.get('port'), () => {
-  console.log('Servidor corriendo en http://localhost:' + app.get('port'));
-});
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
 
